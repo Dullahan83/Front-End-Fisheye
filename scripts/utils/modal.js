@@ -31,7 +31,7 @@ export default class Modal {
       headerH2.textContent = "Contactez-moi";
       headerName.textContent = name;
       button.textContent = "Envoyer";
-      headerImg.setAttribute("src", "../../assets/icons/close.svg");
+      headerImg.setAttribute("src", "./assets/icons/close.svg");
 
       // setting surname input attribute
 
