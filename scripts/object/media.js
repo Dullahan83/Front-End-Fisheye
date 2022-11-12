@@ -39,6 +39,7 @@ export default class Media {
          this.handleLike();
       });
    }
+
    handleLike() {
       this.likeBtn.classList.toggle("fa-regular");
       this.likeBtn.classList.toggle("fa-solid");
@@ -47,6 +48,7 @@ export default class Media {
       const likeCount = this.likeBtn.previousElementSibling;
       likeCount.textContent = this.likes;
    }
+
    handleLightbox(medialist) {
       this.media.addEventListener("click", () => {
          this.createLightbox(medialist);
