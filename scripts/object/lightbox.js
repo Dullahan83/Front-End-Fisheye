@@ -16,19 +16,38 @@ export default class Lightbox {
       const closeIcon = document.createElement("i");
       const figCaption = document.createElement("figcaption");
       const mediaTitle = document.createElement("p");
+
       body.append(lightboxScreen);
       lightboxScreen.appendChild(lightboxContainer);
       lightboxContainer.append(navLeft, mediaContainer, navRightContainer);
-      lightboxScreen.setAttribute("class", "lightbox-overlay");
-      lightboxContainer.setAttribute("class", "lightbox-container");
+      figCaption.appendChild(mediaTitle);
       navRightContainer.append(closeIcon, navRight);
-      navLeft.setAttribute("class", "fa-solid fa-chevron-left");
-
-      navRight.setAttribute("class", "fa-solid fa-chevron-right");
-      closeIcon.setAttribute("class", "fa-solid fa-xmark");
       mediaContainer.innerHTML = "";
       mediaContainer.append(mediaDom, figCaption);
-      figCaption.appendChild(mediaTitle);
+
+      lightboxScreen.setAttribute("class", "lightbox-overlay");
+      lightboxContainer.setAttribute("class", "lightbox-container");
+      navLeft.setAttribute("class", "fa-solid fa-chevron-left");
+      navRight.setAttribute("class", "fa-solid fa-chevron-right");
+      closeIcon.setAttribute("class", "fa-solid fa-xmark");
+
+      mediaDom.setAttribute("title", this.media.title);
+      navLeft.setAttribute(
+         "aria-label",
+         "Appuyer sur les touches fleche gauche ou q pour passer au média précédent"
+      );
+      navLeft.setAttribute("tabindex", "2");
+      navRight.setAttribute(
+         "aria-label",
+         "Appuyer sur les touches fleche droite ou d pour passer au média suivant"
+      );
+      navRight.setAttribute("tabindex", "3");
+      closeIcon.setAttribute(
+         "aria-label",
+         "Appuyer sur la touche Echap pour fermer la vue agrandie"
+      );
+      closeIcon.setAttribute("tabindex", "4");
+
       mediaTitle.textContent = this.media.title;
       body.style.overflowY = "hidden";
       closeIcon.addEventListener("click", () => {
@@ -37,16 +56,26 @@ export default class Lightbox {
 
       window.addEventListener("keydown", (e) => {
          (e.key === "ArrowLeft" || e.key === "q") &&
-            this.navigateLeft(mediaContainer, figCaption, mediaTitle);
+            this.navigateMedia(mediaContainer, figCaption, mediaTitle, "left");
          (e.key === "ArrowRight" || e.key === "d") &&
-            this.navigateRight(mediaContainer, figCaption, mediaTitle);
+            this.navigateMedia(mediaContainer, figCaption, mediaTitle, "right");
          e.key === "Escape" && this.closeLightbox();
       });
       navLeft.addEventListener("click", () => {
-         this.navigateLeft(mediaContainer, figCaption, mediaTitle);
+         this.navigateMedia(mediaContainer, figCaption, mediaTitle, "left");
       });
       navRight.addEventListener("click", () => {
-         this.navigateRight(mediaContainer, figCaption, mediaTitle);
+         this.navigateMedia(mediaContainer, figCaption, mediaTitle, "right");
+      });
+
+      const header = document.querySelector("header");
+      const stickyBar = document.querySelector(".overlay");
+      const main = document.querySelector("main");
+      const domElems = [header, stickyBar, main];
+
+      domElems.forEach((elem) => {
+         elem.setAttribute("aria-hidden", "true");
+         elem.classList.add("hidden");
       });
    }
    findInitialIndex() {
@@ -54,21 +83,13 @@ export default class Lightbox {
          if (this.mediaList[i].title === this.media.title) return i;
       }
    }
-   navigateLeft(directory, caption, title) {
-      this.currentIndex - 1 < 0
-         ? (this.currentIndex = this.mediaList.length - 1)
-         : this.currentIndex--;
-      const media = this.mediaList[this.currentIndex];
-      directory.innerHTML = "";
-      title.textContent = media.title;
 
-      const newMediaDom = media.createMediaDomElement(media, true);
-      directory.append(newMediaDom, caption);
-      caption.append(title);
-   }
-
-   navigateRight(directory, caption, title) {
-      this.currentIndex + 1 > this.mediaList.length - 1
+   navigateMedia(directory, caption, title, direction) {
+      direction === "left"
+         ? this.currentIndex - 1 < 0
+            ? (this.currentIndex = this.mediaList.length - 1)
+            : this.currentIndex--
+         : this.currentIndex + 1 > this.mediaList.length - 1
          ? (this.currentIndex = 0)
          : this.currentIndex++;
       const media = this.mediaList[this.currentIndex];
@@ -76,7 +97,6 @@ export default class Lightbox {
       title.textContent = media.title;
 
       const newMediaDom = media.createMediaDomElement(media, true);
-
       directory.append(newMediaDom, caption);
       caption.append(title);
    }
@@ -87,5 +107,16 @@ export default class Lightbox {
       this.opened && lightbox.remove();
       this.opened && (body.style.overflowY = "visible");
       this.opened = false;
+
+      const header = document.querySelector("header");
+      const stickyBar = document.querySelector(".overlay");
+      const main = document.querySelector("main");
+      const domElems = [header, stickyBar, main];
+
+      domElems.forEach((elem) => {
+         elem.removeAttribute("aria-hidden");
+         elem.classList.remove("hidden");
+         console.log(elem);
+      });
    }
 }

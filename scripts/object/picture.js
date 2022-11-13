@@ -4,33 +4,27 @@ export default class Picture extends Media {
    constructor(data) {
       super(data);
       this.image = data.image;
-      // this.mediaDom = null;
    }
    createMediaDomElement(media, inLightbox) {
       const img = document.createElement("img");
+      img.setAttribute("tabindex", "4");
       if (!inLightbox) {
          img.setAttribute(
             "src",
             `./assets/images/${this.photographerId}/${this.image}`
          );
-         img.setAttribute("alt", this.title);
+         img.setAttribute("aria-label", `Afficher en grand ${this.title}`);
+         img.setAttribute("title", this.title);
          this.createMediaCard(img);
       } else {
          img.setAttribute(
             "src",
             `./assets/images/${media.photographerId}/${media.image}`
          );
-         img.setAttribute("alt", media.title);
+         img.setAttribute("aria-label", `Afficher en grand ${media.title}`);
+         img.setAttribute("title", media.title);
          return img;
       }
-
-      /* this.mediaDom = document.createElement("img");
-      this.mediaDom.setAttribute(
-         "src",
-         `./assets/images/${this.photographerId}/${this.image}`
-      );
-      this.mediaDom.setAttribute("alt", this.title);
-      this.createMediaCard(this.mediaDom); */
    }
    createLightbox(mediaList) {
       const img = document.createElement("img");

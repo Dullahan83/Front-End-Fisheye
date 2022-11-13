@@ -30,8 +30,13 @@ export default class Photograph {
       h3.textContent = `${this.city}, ${this.country}`;
       quote.textContent = this.tagline;
       pricing.textContent = `${this.price}€/jour`;
+
       img.setAttribute("src", `./assets/photographers/${this.portrait}`);
+      img.setAttribute("aria-label", `Avatar de ${this.name}`);
       link.setAttribute("href", `./photographer.html?id=${this.id}`);
+      link.setAttribute("aria-label", `Visitez la page de ${this.name}`);
+      link.setAttribute("tabindex", "2");
+
       container && container.appendChild(article);
       article.appendChild(link);
       link.appendChild(figure);
@@ -86,7 +91,13 @@ export default class Photograph {
       const pFilter = document.createElement("p");
       const select = document.createElement("div");
       const layer = document.createElement("span");
+      let expanded = false;
       layer.setAttribute("class", "layer");
+      layer.setAttribute("role", "button");
+      layer.setAttribute("aria-haspopup", "listbox");
+      layer.setAttribute("aria-expanded", "false");
+      layer.setAttribute("tabindex", "3");
+      layer.setAttribute("aria-controls", "select-filter");
 
       select.setAttribute("class", "select select-closed");
       select.innerHTML = `<div class="select-option" id="likes">
@@ -98,12 +109,33 @@ export default class Photograph {
    <div class="select-option" id="title">
    <p>Titre</p>
    </div>`;
-      container.appendChild(filterContainer);
-      filterContainer.setAttribute("class", "select-bar");
-      filterContainer.append(pFilter, layer, select);
+      select.setAttribute("id", "select-filter");
+      select.setAttribute("role", "listbox");
+      select.setAttribute("aria-activedescendant", "select-filter");
+
       pFilter.textContent = "Trier par";
+
+      filterContainer.setAttribute("class", "select-bar");
+
+      container.appendChild(filterContainer);
+      filterContainer.append(pFilter, layer, select);
+
+      const selects = document.querySelectorAll(".select-option");
+      selects.forEach((option) => {
+         option.setAttribute("role", "option");
+         option.setAttribute("tabindex", "3");
+         option.setAttribute("aria-label", `Trier par ${option.innerText}`);
+         option.setAttribute("aria-hidden", "true");
+      });
+
       layer.addEventListener("click", () => {
+         expanded = !expanded;
+         layer.setAttribute("aria-expanded", expanded);
          select.classList.toggle("select-closed");
+         select.setAttribute("aria-hidden", !expanded);
+         /* selects.forEach((option) => {
+            option.setAttribute("aria-hidden", !expanded);
+         }); */
       });
       this.handleFilter();
    }

@@ -32,7 +32,8 @@ export default class Modal {
       headerName.textContent = name;
       button.textContent = "Envoyer";
       headerImg.setAttribute("src", "./assets/icons/close.svg");
-
+      headerImg.setAttribute("aria-label", "Fermer le formulaire de contact");
+      headerImg.setAttribute("tabindex", "6");
       // setting surname input attribute
 
       labelPrenom.textContent = "Prénom";
@@ -96,6 +97,10 @@ export default class Modal {
          inputMessage
       );
       body.style.overflowY = "hidden";
+      inputPrenom.focus();
+      window.addEventListener("keydown", (e) => {
+         console.log(e);
+      });
    }
 
    #closeModal() {

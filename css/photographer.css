@@ -211,7 +211,7 @@ main {
    top: 0;
    display: flex;
    justify-content: center;
-   background-color: #fff;
+   /* background-color: #fff; */
    z-index: 5;
 }
 
@@ -357,4 +357,8 @@ form button {
    color: #fff;
    border: none;
    border-radius: 5px;
+}
+
+.hidden {
+   display: none;
 }

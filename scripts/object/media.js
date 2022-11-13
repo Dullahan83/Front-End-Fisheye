@@ -20,11 +20,19 @@ export default class Media {
       const mediaName = document.createElement("h2");
       const likeContainer = document.createElement("div");
       const likeCount = document.createElement("p");
+
       this.likeBtn = document.createElement("i");
       this.likeBtn.setAttribute(
          "class",
          this.isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart"
       );
+      this.likeBtn.setAttribute(
+         "aria-label",
+         this.isLiked
+            ? "Vous avez liké ce media"
+            : "Vous n'avez pas encore liké ce média"
+      );
+      this.likeBtn.setAttribute("tabindex", "4");
 
       mediaName.textContent = this.title;
       likeCount.textContent = this.likes;

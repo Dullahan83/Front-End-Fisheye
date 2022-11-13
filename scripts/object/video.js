@@ -8,12 +8,14 @@ export default class Video extends Media {
    createMediaDomElement(media, inLightbox) {
       const video = document.createElement("video");
       video.setAttribute("type", "video/mp4");
+      video.setAttribute("tabindex", "4");
       if (!inLightbox) {
          video.setAttribute(
             "src",
             `./assets/images/${this.photographerId}/${this.video}`
          );
-
+         video.setAttribute("aria-label", `Afficher en grand ${this.title}`);
+         video.setAttribute("title", this.title);
          this.createMediaCard(video);
       } else {
          video.setAttribute(
@@ -21,7 +23,7 @@ export default class Video extends Media {
             `./assets/images/${media.photographerId}/${media.video}`
          );
          video.setAttribute("controls", "controls");
-
+         video.setAttribute("title", media.title);
          return video;
       }
    }
@@ -32,7 +34,6 @@ export default class Video extends Media {
          `./assets/images/${this.photographerId}/${this.video}`
       );
       video.setAttribute("controls", "controls");
-
       video.setAttribute("type", "video/mp4");
       const lightbox = new Lightbox(this, mediaList);
       lightbox.createDomLightbox(video);
