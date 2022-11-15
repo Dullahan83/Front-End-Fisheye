@@ -143,7 +143,11 @@ main {
 .photograph-work figure {
    max-width: 350px;
 }
-.photograph-work figure > :first-child {
+.photograph-work figure a {
+   width: 100%;
+   height: fit-content;
+}
+.photograph-work figure a > :first-child {
    width: 350px;
    height: 300px;
    object-fit: cover;
@@ -175,11 +179,18 @@ main {
    display: flex;
    align-items: center;
 }
-.photograph-work i {
+.photograph-work button {
    margin-left: 5px;
+   background-color: transparent;
+   border: none;
 }
-.photograph-work i:hover {
+
+.photograph-work button:hover {
    cursor: pointer;
+}
+.photograph-work button i {
+   font-size: 24px;
+   color: #901c1c;
 }
 .overlay {
    display: flex;

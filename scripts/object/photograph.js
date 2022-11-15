@@ -133,11 +133,16 @@ export default class Photograph {
          layer.setAttribute("aria-expanded", expanded);
          select.classList.toggle("select-closed");
          select.setAttribute("aria-hidden", !expanded);
-         /* selects.forEach((option) => {
-            option.setAttribute("aria-hidden", !expanded);
-         }); */
+         this.displayFilter(selects);
       });
       this.handleFilter();
+   }
+   displayFilter(options) {
+      for (let i = 0; i < options.length; i++) {
+         if (i != 0) {
+            options[i].style.display = "flex";
+         }
+      }
    }
    #displayRealisations() {
       const container = document.getElementById("main");
@@ -179,8 +184,13 @@ export default class Photograph {
       pCount.textContent = this.#calculateLikeCount();
    }
    handleFilter() {
-      let target;
       let options = document.querySelectorAll(".select-option");
+      let target = options[0];
+      for (let i = 0; i < options.length; i++) {
+         if (i != 0) {
+            options[i].style.display = "none";
+         }
+      }
       const select = document.querySelector(".select");
       options.forEach((option) => {
          option.addEventListener("click", () => {
@@ -206,7 +216,7 @@ export default class Photograph {
    }
 
    #addLikeEvent() {
-      const likeBtn = document.querySelectorAll("figure i");
+      const likeBtn = document.querySelectorAll("figure button");
       likeBtn.forEach((btn) => {
          btn.addEventListener("click", () => {
             this.updateLikeCount();

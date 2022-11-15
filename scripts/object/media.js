@@ -8,7 +8,7 @@ export default class Media {
       this.price = data.price;
       this.media = null;
       this.isLiked = false;
-      this.likeBtn = null;
+      this.likeIcon = null;
    }
 
    createMediaCard(mediaDom) {
@@ -20,45 +20,48 @@ export default class Media {
       const mediaName = document.createElement("h2");
       const likeContainer = document.createElement("div");
       const likeCount = document.createElement("p");
-
-      this.likeBtn = document.createElement("i");
-      this.likeBtn.setAttribute(
+      const likeButton = document.createElement("button");
+      this.likeIcon = document.createElement("i");
+      this.likeIcon.setAttribute(
          "class",
          this.isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart"
       );
-      this.likeBtn.setAttribute(
+      this.likeIcon.setAttribute(
          "aria-label",
          this.isLiked
             ? "Vous avez liké ce media"
             : "Vous n'avez pas encore liké ce média"
       );
-      this.likeBtn.setAttribute("tabindex", "4");
-
+      this.likeIcon.setAttribute("tabindex", "4");
+      link.setAttribute("aria-label", `Afficher ${this.title} en grand`);
+      link.setAttribute("href", "#");
+      link.setAttribute("tabindex", "4");
       mediaName.textContent = this.title;
       likeCount.textContent = this.likes;
 
-      directory.appendChild(link);
-      link.appendChild(figure);
-      figure.append(this.media, figcaption);
-      likeContainer.append(likeCount, this.likeBtn);
+      directory.appendChild(figure);
+      link.appendChild(this.media);
+      figure.append(link, figcaption);
+      likeContainer.append(likeCount, likeButton);
+      likeButton.appendChild(this.likeIcon);
       figcaption.append(mediaName, likeContainer);
 
-      this.likeBtn.addEventListener("click", () => {
+      likeButton.addEventListener("click", () => {
          this.handleLike();
       });
    }
 
    handleLike() {
-      this.likeBtn.classList.toggle("fa-regular");
-      this.likeBtn.classList.toggle("fa-solid");
+      this.likeIcon.classList.toggle("fa-regular");
+      this.likeIcon.classList.toggle("fa-solid");
       this.isLiked = !this.isLiked;
       this.isLiked ? this.likes++ : this.likes--;
-      const likeCount = this.likeBtn.previousElementSibling;
+      const likeCount = this.likeIcon.parentElement.previousElementSibling;
       likeCount.textContent = this.likes;
    }
 
    handleLightbox(medialist) {
-      this.media.addEventListener("click", () => {
+      this.media.parentElement.addEventListener("click", () => {
          this.createLightbox(medialist);
       });
    }
