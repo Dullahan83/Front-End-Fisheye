@@ -10,43 +10,7 @@ export default class Photograph {
       this.price = data.price;
       this.portrait = data.portrait;
       this.mediaList = [];
-      this.#getMediaList(mediasData);
-   }
-
-   createPhotographCard() {
-      const container = document.querySelector(".photographer_section");
-      const article = document.createElement("article");
-      const link = document.createElement("a");
-      const figure = document.createElement("figure");
-      const figcaption = document.createElement("figcaption");
-      const img = document.createElement("img");
-      const articleFooter = document.createElement("footer");
-      const h2 = document.createElement("h2");
-      const h3 = document.createElement("h3");
-      const quote = document.createElement("p");
-      const pricing = document.createElement("p");
-
-      h2.textContent = this.name;
-      h3.textContent = `${this.city}, ${this.country}`;
-      quote.textContent = this.tagline;
-      pricing.textContent = `${this.price}€/jour`;
-
-      img.setAttribute("src", `./assets/photographers/${this.portrait}`);
-      img.setAttribute("aria-label", `Avatar de ${this.name}`);
-      link.setAttribute("href", `./photographer.html?id=${this.id}`);
-      link.setAttribute("aria-label", `Visitez la page de ${this.name}`);
-      link.setAttribute("tabindex", "2");
-
-      container && container.appendChild(article);
-      article.appendChild(link);
-      link.appendChild(figure);
-      figure.appendChild(img);
-      figure.appendChild(figcaption);
-      figcaption.appendChild(h2);
-      article.appendChild(articleFooter);
-      articleFooter.appendChild(h3);
-      articleFooter.appendChild(quote);
-      articleFooter.appendChild(pricing);
+      // this.#getMediaList(mediasData);
    }
 
    #displayPhotographInfos(photographerId) {
@@ -68,10 +32,12 @@ export default class Photograph {
       }
    }
 
-   #getMediaList(mediasData) {
+   getMediaList(mediasData) {
       mediasData.forEach((element) => {
-         element.photographerId === this.id &&
-            this.mediaList.push(new MediaType(element));
+         if (element.photographerId === this.id) {
+            let media = new MediaType(element);
+            this.mediaList.push(media);
+         }
       });
       this.mediaList.sort((a, b) => (a.likes > b.likes ? 1 : -1));
    }

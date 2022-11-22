@@ -10,5 +10,6 @@ let data = await init.getDatas();
 const photographObject = await data.photographers.filter(
    (photographer) => photographer.id == photographerId
 );
-const photograph = new Photograph(photographObject[0], data.media);
+const photograph = new Photograph(photographObject[0]);
+photograph.getMediaList(data.media);
 photograph.populatePhotographPage(photographerId);
