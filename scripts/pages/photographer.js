@@ -13,3 +13,7 @@ const photographObject = await data.photographers.filter(
 const photograph = new Photograph(photographObject[0]);
 photograph.getMediaList(data.media);
 photograph.populatePhotographPage(photographerId);
+
+window.addEventListener("click", (e) => {
+   console.log(e);
+});

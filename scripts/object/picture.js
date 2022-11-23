@@ -12,7 +12,6 @@ export default class Picture extends Media {
             "src",
             `./assets/images/${this.photographerId}/${this.image}`
          );
-         // img.setAttribute("aria-label", `Afficher en grand ${this.title}`);
          img.setAttribute("title", this.title);
          this.createMediaCard(img);
       } else {
@@ -20,7 +19,6 @@ export default class Picture extends Media {
             "src",
             `./assets/images/${media.photographerId}/${media.image}`
          );
-         // img.setAttribute("aria-label", `Afficher en grand ${media.title}`);
          img.setAttribute("title", media.title);
          return img;
       }

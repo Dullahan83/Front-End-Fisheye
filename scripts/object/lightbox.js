@@ -5,6 +5,8 @@ export default class Lightbox {
       this.currentIndex = this.findInitialIndex();
       this.opened = true;
    }
+
+   // create dom element for the lightbox
    createDomLightbox(mediaDom) {
       const body = document.querySelector("body");
       const lightboxScreen = document.createElement("div");
@@ -31,6 +33,7 @@ export default class Lightbox {
       navRight.setAttribute("class", "fa-solid fa-chevron-right");
       closeIcon.setAttribute("class", "fa-solid fa-xmark");
 
+      //set accessibility attribute
       mediaDom.setAttribute("title", this.media.title);
       navLeft.setAttribute(
          "aria-label",
@@ -54,6 +57,7 @@ export default class Lightbox {
          this.closeLightbox();
       });
 
+      //set event listener for keyboard navigation in lighbox
       window.addEventListener("keydown", (e) => {
          (e.key === "ArrowLeft" || e.key === "q") &&
             this.navigateMedia(mediaContainer, figCaption, mediaTitle, "left");
@@ -61,6 +65,7 @@ export default class Lightbox {
             this.navigateMedia(mediaContainer, figCaption, mediaTitle, "right");
          e.key === "Escape" && this.closeLightbox();
       });
+
       navLeft.addEventListener("click", () => {
          this.navigateMedia(mediaContainer, figCaption, mediaTitle, "left");
       });
@@ -73,17 +78,21 @@ export default class Lightbox {
       const main = document.querySelector("main");
       const domElems = [header, stickyBar, main];
 
+      //hide dom element that shouldn't be displayed when lightbox is open
       domElems.forEach((elem) => {
          elem.setAttribute("aria-hidden", "true");
          elem.classList.add("hidden");
       });
    }
+
+   // return the index of the opened media in lightbox
    findInitialIndex() {
       for (let i = 0; i < this.mediaList.length; i++) {
          if (this.mediaList[i].title === this.media.title) return i;
       }
    }
 
+   // permit the navigation between media in lighbox
    navigateMedia(directory, caption, title, direction) {
       direction === "left"
          ? this.currentIndex - 1 < 0
@@ -101,6 +110,7 @@ export default class Lightbox {
       caption.append(title);
    }
 
+   // close lightbox and remove dom content
    closeLightbox() {
       const body = document.querySelector("body");
       const lightbox = document.querySelector(".lightbox-overlay");
@@ -116,7 +126,6 @@ export default class Lightbox {
       domElems.forEach((elem) => {
          elem.removeAttribute("aria-hidden");
          elem.classList.remove("hidden");
-         console.log(elem);
       });
    }
 }

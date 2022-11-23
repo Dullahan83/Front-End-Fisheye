@@ -22,6 +22,8 @@ export default class Media {
       const likeCount = document.createElement("p");
       const likeButton = document.createElement("button");
       this.likeIcon = document.createElement("i");
+
+      //set the heart style depending on the like status
       this.likeIcon.setAttribute(
          "class",
          this.isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart"

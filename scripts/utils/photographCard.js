@@ -1,6 +1,4 @@
 export default function createPhotographCard(data) {
-   console.log(data);
-   // const container = document.querySelector(".photographer_section");
    const article = document.createElement("article");
    const link = document.createElement("a");
    const figure = document.createElement("figure");
@@ -23,7 +21,6 @@ export default function createPhotographCard(data) {
    link.setAttribute("aria-label", `Visitez la page de ${data.name}`);
    link.setAttribute("tabindex", "2");
 
-   // container && container.appendChild(article);
    article.appendChild(link);
    link.appendChild(figure);
    figure.appendChild(img);

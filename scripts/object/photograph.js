@@ -1,7 +1,7 @@
 import MediaType from "../factories/mediaFactory.js";
 import Modal from "../utils/modal.js";
 export default class Photograph {
-   constructor(data, mediasData) {
+   constructor(data) {
       this.name = data.name;
       this.id = data.id;
       this.city = data.city;
@@ -10,7 +10,6 @@ export default class Photograph {
       this.price = data.price;
       this.portrait = data.portrait;
       this.mediaList = [];
-      // this.#getMediaList(mediasData);
    }
 
    #displayPhotographInfos(photographerId) {
@@ -56,7 +55,7 @@ export default class Photograph {
       const filterContainer = document.createElement("div");
       const pFilter = document.createElement("p");
       const select = document.createElement("div");
-      const layer = document.createElement("span");
+      const layer = document.createElement("button");
       let expanded = false;
       layer.setAttribute("class", "layer");
       layer.setAttribute("role", "button");
@@ -100,6 +99,22 @@ export default class Photograph {
          select.classList.toggle("select-closed");
          select.setAttribute("aria-hidden", !expanded);
          this.displayFilter(selects);
+      });
+      window.addEventListener("keydown", (e) => {
+         if (e.key === "Enter") {
+            if (e.target.tagName === "DIV" && expanded) {
+               select.prepend(e.target);
+               this.sortByFilter(e.target.id);
+               layer.setAttribute("aria-expanded", expanded);
+               select.setAttribute("aria-hidden", !expanded);
+               select.classList.toggle("select-closed");
+               for (let i = 0; i < selects.length; i++) {
+                  if (i != 0) {
+                     selects[i].style.display = "none";
+                  }
+               }
+            }
+         }
       });
       this.handleFilter();
    }
@@ -151,7 +166,6 @@ export default class Photograph {
    }
    handleFilter() {
       let options = document.querySelectorAll(".select-option");
-      let target = options[0];
       for (let i = 0; i < options.length; i++) {
          if (i != 0) {
             options[i].style.display = "none";
@@ -160,19 +174,21 @@ export default class Photograph {
       const select = document.querySelector(".select");
       options.forEach((option) => {
          option.addEventListener("click", () => {
-            target = option;
             select.prepend(option);
             select.classList.toggle("select-closed");
             this.sortByFilter(option.id);
          });
       });
    }
+
+   //sort media depending on chosen option
    sortByFilter(option) {
       const filter = option;
       const sortedList = this.mediaList.sort((a, b) =>
          a[filter] > b[filter] ? 1 : -1
       );
       const directory = document.querySelector(".photograph-work");
+      // reset media container and recreate from sorted list
       directory.innerHTML = "";
       sortedList.forEach((element) => {
          element.createMediaDomElement();
@@ -189,6 +205,7 @@ export default class Photograph {
          });
       });
    }
+
    #handleModal() {
       const button = document.querySelector(".contact_button");
       button.addEventListener("click", () => {
