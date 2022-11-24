@@ -11,7 +11,17 @@ export default class Photograph {
       this.portrait = data.portrait;
       this.mediaList = [];
    }
+   // call methods necessary to the photograph page
+   populatePhotographPage(photographerId) {
+      this.#displayPhotographInfos(photographerId);
+      this.createFilterBar();
+      this.#displayRealisations();
+      this.#createStickyBar();
+      this.#addLikeEvent();
+      this.#handleModal();
+   }
 
+   //display the photograph info
    #displayPhotographInfos(photographerId) {
       if (photographerId == this.id) {
          const container = document.querySelector(".photograph-header");
@@ -20,7 +30,9 @@ export default class Photograph {
          const location = document.createElement("p");
          const quote = document.createElement("p");
          const img = document.createElement("img");
+
          img.setAttribute("src", `./assets/photographers/${this.portrait}`);
+
          container.prepend(photographInfos);
          photographInfos.append(photographName, location, quote);
          container.appendChild(img);
@@ -30,7 +42,7 @@ export default class Photograph {
          quote.textContent = this.tagline;
       }
    }
-
+   //sort media list to attribute the right ones to the photograph
    getMediaList(mediasData) {
       mediasData.forEach((element) => {
          if (element.photographerId === this.id) {
@@ -41,20 +53,11 @@ export default class Photograph {
       this.mediaList.sort((a, b) => (a.likes > b.likes ? 1 : -1));
    }
 
-   populatePhotographPage(photographerId) {
-      this.#displayPhotographInfos(photographerId);
-      this.createFilterBar();
-      this.#displayRealisations();
-      this.#createStickyBar();
-      this.#addLikeEvent();
-      this.#handleModal();
-   }
-
    createFilterBar() {
       const container = document.getElementById("main");
       const filterContainer = document.createElement("div");
       const pFilter = document.createElement("p");
-      const select = document.createElement("div");
+      const select = document.createElement("ul");
       const layer = document.createElement("button");
       let expanded = false;
       layer.setAttribute("class", "layer");
@@ -65,15 +68,15 @@ export default class Photograph {
       layer.setAttribute("aria-controls", "select-filter");
 
       select.setAttribute("class", "select select-closed");
-      select.innerHTML = `<div class="select-option" id="likes">
+      select.innerHTML = `<li class="select-option" id="likes">
       <p>Popularité</p>
-   </div>
-   <div class="select-option" id="date">
+   </li>
+   <li class="select-option" id="date">
    <p>Date</p>
-   </div>
-   <div class="select-option" id="title">
+   </li>
+   <li class="select-option" id="title">
    <p>Titre</p>
-   </div>`;
+   </li>`;
       select.setAttribute("id", "select-filter");
       select.setAttribute("role", "listbox");
       select.setAttribute("aria-activedescendant", "select-filter");
@@ -85,7 +88,7 @@ export default class Photograph {
       container.appendChild(filterContainer);
       filterContainer.append(pFilter, layer, select);
 
-      const selects = document.querySelectorAll(".select-option");
+      let selects = document.querySelectorAll(".select-option");
       selects.forEach((option) => {
          option.setAttribute("role", "option");
          option.setAttribute("tabindex", "3");
@@ -93,6 +96,7 @@ export default class Photograph {
          option.setAttribute("aria-hidden", "true");
       });
 
+      // add event to open the filter list
       layer.addEventListener("click", () => {
          expanded = !expanded;
          layer.setAttribute("aria-expanded", expanded);
@@ -100,11 +104,14 @@ export default class Photograph {
          select.setAttribute("aria-hidden", !expanded);
          this.displayFilter(selects);
       });
+
+      //handle filter choice by keyboard
       window.addEventListener("keydown", (e) => {
          if (e.key === "Enter") {
-            if (e.target.tagName === "DIV" && expanded) {
+            if (e.target.tagName === "LI" && expanded) {
                select.prepend(e.target);
                this.sortByFilter(e.target.id);
+               selects = document.querySelectorAll(".select-option");
                layer.setAttribute("aria-expanded", expanded);
                select.setAttribute("aria-hidden", !expanded);
                select.classList.toggle("select-closed");
@@ -113,11 +120,13 @@ export default class Photograph {
                      selects[i].style.display = "none";
                   }
                }
+               expanded = false;
             }
          }
       });
       this.handleFilter();
    }
+
    displayFilter(options) {
       for (let i = 0; i < options.length; i++) {
          if (i != 0) {
@@ -125,6 +134,8 @@ export default class Photograph {
          }
       }
    }
+
+   //display medias of the photograph
    #displayRealisations() {
       const container = document.getElementById("main");
       const directory = document.createElement("section");
@@ -136,6 +147,7 @@ export default class Photograph {
       });
    }
 
+   //calculate total count of likes
    #calculateLikeCount() {
       let likeCount = 0;
       this.mediaList.forEach((media) => {
@@ -144,6 +156,7 @@ export default class Photograph {
       return likeCount;
    }
 
+   //display the sticky bar
    #createStickyBar() {
       const body = document.querySelector("body");
       const container = document.createElement("div");
@@ -164,6 +177,7 @@ export default class Photograph {
       const pCount = document.querySelector(".overlay p");
       pCount.textContent = this.#calculateLikeCount();
    }
+
    handleFilter() {
       let options = document.querySelectorAll(".select-option");
       for (let i = 0; i < options.length; i++) {

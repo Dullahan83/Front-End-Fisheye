@@ -12,10 +12,11 @@ export default class Media {
    }
 
    createMediaCard(mediaDom) {
+      this.media = mediaDom;
+
       const directory = document.querySelector(".photograph-work");
       const link = document.createElement("a");
       const figure = document.createElement("figure");
-      this.media = mediaDom;
       const figcaption = document.createElement("figcaption");
       const mediaName = document.createElement("h2");
       const likeContainer = document.createElement("div");
@@ -34,6 +35,8 @@ export default class Media {
             ? "Vous avez liké ce media"
             : "Vous n'avez pas encore liké ce média"
       );
+
+      //set the attribute and content
       this.likeIcon.setAttribute("tabindex", "4");
       link.setAttribute("aria-label", `Afficher ${this.title} en grand`);
       link.setAttribute("href", "#");
@@ -48,11 +51,13 @@ export default class Media {
       likeButton.appendChild(this.likeIcon);
       figcaption.append(mediaName, likeContainer);
 
+      // add event to like a media
       likeButton.addEventListener("click", () => {
          this.handleLike();
       });
    }
 
+   //handle like event
    handleLike() {
       this.likeIcon.classList.toggle("fa-regular");
       this.likeIcon.classList.toggle("fa-solid");
@@ -62,6 +67,7 @@ export default class Media {
       likeCount.textContent = this.likes;
    }
 
+   //add event to create lightbox on click
    handleLightbox(medialist) {
       this.media.parentElement.addEventListener("click", () => {
          this.createLightbox(medialist);

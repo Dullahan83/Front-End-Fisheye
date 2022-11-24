@@ -18,6 +18,9 @@ export default class Lightbox {
       const closeIcon = document.createElement("i");
       const figCaption = document.createElement("figcaption");
       const mediaTitle = document.createElement("p");
+      const header = document.querySelector("header");
+      const stickyBar = document.querySelector(".overlay");
+      const main = document.querySelector("main");
 
       body.append(lightboxScreen);
       lightboxScreen.appendChild(lightboxContainer);
@@ -53,9 +56,6 @@ export default class Lightbox {
 
       mediaTitle.textContent = this.media.title;
       body.style.overflowY = "hidden";
-      closeIcon.addEventListener("click", () => {
-         this.closeLightbox();
-      });
 
       //set event listener for keyboard navigation in lighbox
       window.addEventListener("keydown", (e) => {
@@ -65,17 +65,17 @@ export default class Lightbox {
             this.navigateMedia(mediaContainer, figCaption, mediaTitle, "right");
          e.key === "Escape" && this.closeLightbox();
       });
-
+      // add click events
       navLeft.addEventListener("click", () => {
          this.navigateMedia(mediaContainer, figCaption, mediaTitle, "left");
       });
       navRight.addEventListener("click", () => {
          this.navigateMedia(mediaContainer, figCaption, mediaTitle, "right");
       });
+      closeIcon.addEventListener("click", () => {
+         this.closeLightbox();
+      });
 
-      const header = document.querySelector("header");
-      const stickyBar = document.querySelector(".overlay");
-      const main = document.querySelector("main");
       const domElems = [header, stickyBar, main];
 
       //hide dom element that shouldn't be displayed when lightbox is open
@@ -94,6 +94,7 @@ export default class Lightbox {
 
    // permit the navigation between media in lighbox
    navigateMedia(directory, caption, title, direction) {
+      //depending on direction, navigate left or right
       direction === "left"
          ? this.currentIndex - 1 < 0
             ? (this.currentIndex = this.mediaList.length - 1)
@@ -102,6 +103,7 @@ export default class Lightbox {
          ? (this.currentIndex = 0)
          : this.currentIndex++;
       const media = this.mediaList[this.currentIndex];
+
       directory.innerHTML = "";
       title.textContent = media.title;
 
