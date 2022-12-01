@@ -5,6 +5,7 @@ export default class Picture extends Media {
       super(data);
       this.image = data.image;
    }
+
    createMediaDomElement(media, inLightbox) {
       const img = document.createElement("img");
       if (!inLightbox) {

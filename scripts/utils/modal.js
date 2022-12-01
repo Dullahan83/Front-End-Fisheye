@@ -13,6 +13,8 @@ export default class Modal {
       const headerTextContainer = document.createElement("div");
       const headerH2 = document.createElement("h2");
       const headerName = document.createElement("h2");
+
+
       const headerImg = document.createElement("img");
       const form = document.createElement("form");
       const inputsContainer = document.createElement("div");
@@ -33,7 +35,7 @@ export default class Modal {
       button.textContent = "Envoyer";
       headerImg.setAttribute("src", "./assets/icons/close.svg");
       headerImg.setAttribute("aria-label", "Fermer le formulaire de contact");
-      headerImg.setAttribute("tabindex", "6");
+      headerImg.setAttribute("tabindex", "1");
       // setting surname input attribute
 
       labelPrenom.textContent = "Prénom";
@@ -74,7 +76,7 @@ export default class Modal {
       window.addEventListener("keydown", (e) => {
          e.key === "Escape" && this.#closeModal();
       });
-
+      // buttonClose.addEventListener("click", () => this.#closeModal())
       button.addEventListener("click", (e) => {
          this.#submitForm(e);
       });
@@ -84,6 +86,9 @@ export default class Modal {
       modal.appendChild(modalHeader);
       modalHeader.append(headerTextContainer, headerName);
       headerTextContainer.append(headerH2, headerImg);
+      // headerTextContainer.append(headerH2, buttonClose);
+      // buttonClose.appendChild(headerImg)
+
       modal.appendChild(form);
       form.append(inputsContainer, button);
       inputsContainer.append(
@@ -98,9 +103,7 @@ export default class Modal {
       );
       body.style.overflowY = "hidden";
       inputPrenom.focus();
-      window.addEventListener("keydown", (e) => {
-         console.log(e);
-      });
+      this.hideBackgroundAccessibility(true)
    }
 
    #closeModal() {
@@ -109,6 +112,7 @@ export default class Modal {
       this.isOpened && modalContainer.remove();
       this.isOpened && (body.style.overflowY = "visible");
       this.isOpened = false;
+      this.hideBackgroundAccessibility(false)
    }
 
    #submitForm(e) {
@@ -118,7 +122,25 @@ export default class Modal {
          console.log(input.value);
       });
       const textarea = document.querySelector("form textarea");
-      console.log(textarea.value);
+      console.log(textarea.value)
       this.#closeModal();
+   }
+
+   hideBackgroundAccessibility(state) {
+      const homeLink = document.querySelector("header a")
+      const btnHeader = document.querySelector(".contact_button")
+      const selectBtn = document.querySelector(".layer")
+      const option = document.querySelector(".select-option")
+      const hearts = document.querySelectorAll(".photograph-work .fa-heart")
+
+      homeLink.setAttribute("tabindex", state ? "-1" : "1")
+      btnHeader.setAttribute("tabindex", state ? "-1" : "2")
+      selectBtn.setAttribute("tabindex", state ? "-1" : "3")
+      option.setAttribute("tabindex", state ? "-1" : "3")
+
+      hearts.forEach(heart => {
+         heart.setAttribute("tabindex", state ? "-1" : "4")
+      })
+
    }
 }
